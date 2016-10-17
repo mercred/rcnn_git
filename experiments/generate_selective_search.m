@@ -1,0 +1,18 @@
+function generate_selective_search(setName)
+%GENERATE SELECTIVE SEARCH
+%setName specifies which set to generate region proposals on,
+%    possible values: 'train', 'val','test','trainval'
+Munchen = './datasets/3k_Munchen';
+imdb = imdb_from_munchen(Munchen, setName);
+% generate selective search for each image id
+for k=1:length(imdb.image_ids)
+    im=sprintf('%s/%s.jpg', imdb.image_dir,imdb.image_ids{k});
+    boxes_tmp = selective_search_boxes(imread(im));
+    boxes = boxes_tmp(:, [2 1 4 3]) - 1; 
+    save('test_mat',boxes)
+end
+% Encountered error : Requested 74769x74769 (41.7GB) array exceeds maximum array size preference. Creation of
+% arrays greater than this limit may take a long time and cause MATLAB to become
+% unresponsive. See array size limit or preference panel for more information.    
+end
+
